@@ -36,15 +36,15 @@ const CloseIcon: React.FC = () => (
 );
 
 export const Nav: React.FunctionComponent<NavProps> = ({ isOpen, setIsOpen }) => (
-  <nav>
-    <div className="flex items-center justify-between h-16">
+  <nav className="w-full">
+    <div className="flex items-center justify-between h-16 px-2 sm:px-0">
       <div className="flex items-center">
-        <a href="/" className="text-gray-700 drop-shadow-xl text-xl font-bold">
+        <a href="/" className="text-gray-700 drop-shadow-xl text-lg sm:text-xl font-bold">
           Ben Simmers
         </a>
       </div>
       <div className="hidden md:block">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 lg:space-x-4">
           {navLinks.map(({ to, direction, color, text }) => (
             <WavyLink
               key={to}
@@ -52,18 +52,18 @@ export const Nav: React.FunctionComponent<NavProps> = ({ isOpen, setIsOpen }) =>
               direction={direction}
               duration={1000}
               color={color}
-              className="ml-4 px-3 py-2 text-gray-600 font-medium rounded-md ease-in-out duration-150 hover:transform hover:scale-110 hover:drop-shadow-3xl hover:animate-wiggle"
+              className="px-2 lg:px-3 py-2 text-sm lg:text-base text-gray-600 font-medium rounded-md transition-all duration-200 hover:text-gray-900 hover:bg-gray-100 hover:shadow-md hover:-translate-y-0.5"
             >
               {text}
             </WavyLink>
           ))}
         </div>
       </div>
-      <div className="-mr-2 flex md:hidden">
+      <div className="flex md:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
           type="button"
-          className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset ease-in-out duration-150"
+          className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 ease-in-out duration-150"
           aria-controls="mobile-menu"
           aria-expanded={isOpen}
         >
@@ -73,9 +73,15 @@ export const Nav: React.FunctionComponent<NavProps> = ({ isOpen, setIsOpen }) =>
       </div>
     </div>
     <div className={`${isOpen ? "block" : "hidden"} md:hidden`} id="mobile-menu">
-      <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 space-x-3">
+      <div className="px-2 pt-3 pb-4 flex flex-col gap-2">
         {navLinks.map(({ to, direction, color, text }) => (
-          <WavyLink key={to} to={to} direction={direction} color={color}>
+          <WavyLink 
+            key={to} 
+            to={to} 
+            direction={direction} 
+            color={color}
+            className="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+          >
             {text}
           </WavyLink>
         ))}

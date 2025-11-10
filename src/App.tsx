@@ -13,7 +13,7 @@ const Footer = React.lazy(() => import("./utils/Footer"));
 const App: React.FunctionComponent<{}> = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <BrowserRouter>
         <WavyContainer />
         <Routes>
@@ -22,9 +22,10 @@ const App: React.FunctionComponent<{}> = () => {
             element={
               <React.Fragment>
                 <Nav isOpen={isOpen} setIsOpen={setIsOpen} />
-                <main>
+                <main className="flex-grow">
                   <Outlet />
                 </main>
+                <Footer />
               </React.Fragment>
             }
           >
@@ -59,7 +60,6 @@ const App: React.FunctionComponent<{}> = () => {
           </Route>
         </Routes>
       </BrowserRouter>
-      <Footer />
     </div>
   );
 };

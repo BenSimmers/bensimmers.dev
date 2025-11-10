@@ -15,26 +15,26 @@ export const Footer: React.FunctionComponent = () => {
   ];
 
   return (
-    <footer className="bottom-0">
-      <div>
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <a className="flex items-center sm:mb-0 space-x-3 rtl:space-x-reverse">
-            <span className="self-center text-l font-semibold whitespace-nowrap">
+    <footer className="mt-12 sm:mt-16 py-6">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
+          <a className="flex items-center space-x-3 rtl:space-x-reverse">
+            <span className="self-center text-base sm:text-lg font-semibold whitespace-nowrap">
               Ben
             </span>
           </a>
-          <ul className="flex flex-wrap items-center mb-2 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400 space-x-2 rtl:space-x-reverse">
+          <ul className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm font-medium text-gray-500 dark:text-gray-400">
             {links.map((link) => (
               <li key={link.url}>
-                <a href={link.url} className="hover:underline">
+                <a href={link.url} className="hover:underline hover:text-gray-700 transition-colors">
                   {link.name}
                 </a>
               </li>
             ))}
           </ul>
         </div>
-        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-500" />
-        <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400 mb-8">
+        <hr className="my-4 sm:my-6 border-gray-200 dark:border-gray-500" />
+        <span className="block text-xs sm:text-sm text-gray-500 text-center dark:text-gray-400 pb-4">
           © {currentYear} Benjamin Simmers
         </span>
       </div>

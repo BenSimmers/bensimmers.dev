@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "./Card";
 import { SkeletonCard } from "./SkeletonCard";
 import { useProjects, useProjectsActions } from "../store/projectStore";
-import { ProjectType } from "../utils/types";
+import { ProjectType, Repo } from "../utils/types";
 
 export const Projects: React.FunctionComponent = () => {
   const { projects } = useProjects();
@@ -18,30 +18,26 @@ export const Projects: React.FunctionComponent = () => {
       ? projects
       : Array.from({ length: 4 }).map(() => null);
 
-    return items.map((item, i) => (
-      <div
-        key={item ? item.id : i}
-        className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4"
-      >
-        {item ? (
-          <Card
-            title={item.full_name}
-            description={item.description}
-            link={item.html_url}
-          />
-        ) : (
-          <SkeletonCard num={6} />
-        )}
-      </div>
-    ));
+    return items.map((item, i) =>
+      item ? (
+        <Card
+          key={item.id}
+          title={item.full_name}
+          description={item.description}
+          link={item.html_url}
+        />
+      ) : (
+        <SkeletonCard key={i} num={6} />
+      )
+    );
   };
   return (
     <>
-      <main className="mt-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="lg:text-center">
-          <h1 className="text-4xl font-bold text-center">Notable Projects</h1>
+      <main className="mt-6 sm:mt-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-6 sm:mb-10">
+          <h1 className="text-3xl sm:text-4xl font-bold">Notable Projects</h1>
         </div>
-        <div className="mt-10 flex flex-row flex-wrap -mx-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {renderItems(projects)}
         </div>
       </main>

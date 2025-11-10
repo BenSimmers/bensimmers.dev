@@ -15,7 +15,7 @@ export const Title: React.FunctionComponent = () => (
     wrapper="div"
     cursor={true}
     repeat={Infinity}
-    className="text-6xl font-bold text-center"
+    // className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center px-4"
     aria-label="Animated introduction text"
   />
 );

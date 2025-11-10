@@ -13,42 +13,42 @@ export const AboutMe: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <h1 className="text-4xl font-bold text-center" id="about-me-title">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center px-4 mt-6 sm:mt-8" id="about-me-title">
         About Me
       </h1>
 
-      <div className="flex flex-col items-center justify-center mt-10">
+      <div className="flex flex-col items-center justify-center mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8">
         <section
-          className="w-full bg-white rounded-lg shadow-md p-6"
+          className="w-full max-w-4xl bg-white rounded-lg shadow-md p-4 sm:p-6 lg:p-8"
           aria-labelledby="introduction-title"
         >
           <h2 className="sr-only" id="introduction-title">
             Introduction
           </h2>
-          <p>{Introduction.introduction}</p>
+          <p className="text-sm sm:text-base leading-relaxed">{Introduction.introduction}</p>
         </section>
 
         <TimeLine />
 
         <section
-          className="w-full bg-white rounded-lg shadow-md p-6 mt-10 mb-10"
+          className="w-full max-w-4xl bg-white rounded-lg shadow-md p-4 sm:p-6 lg:p-8 mt-6 sm:mt-10 mb-6 sm:mb-10"
           aria-labelledby="details-title"
         >
-          <h2 className="text-2xl font-bold text-center" id="details-title">
+          <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6" id="details-title">
             The Details
           </h2>
           <ul className="divide-y divide-gray-200">
             {features.map((feature) => (
-              <li key={feature.name} className="py-4">
+              <li key={feature.name} className="py-3 sm:py-4">
                 <div className="flex space-x-3">
                   <div className="flex-1 space-y-1">
                     <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
+                      className="text-base sm:text-lg leading-6 font-medium text-gray-900"
                       id={`feature-title-${feature.name}`}
                     >
                       {feature.name}
                     </h3>
-                    <p className="text-gray-500">{feature.description}</p>
+                    <p className="text-sm sm:text-base text-gray-500">{feature.description}</p>
                   </div>
                 </div>
               </li>
