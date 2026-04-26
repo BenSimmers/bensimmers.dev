@@ -15,6 +15,12 @@ type Repo = {
   full_name: string;
   description: string;
   private?: boolean;
+  language?: string;
+  stargazers_count?: number;
+  watchers_count?: number;
+  topics?: string[];
+  homepage?: string;
+  pushed_at?: string;
 };
 
 type ProjectType = Repo;

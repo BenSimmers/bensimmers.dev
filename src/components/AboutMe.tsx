@@ -10,52 +10,94 @@ export const AboutMe: React.FunctionComponent = () => {
       features: state.features,
     }))
   );
+  const highlightedFeatures = features.slice(0, 2);
 
   return (
-    <React.Fragment>
-      <h1 className="text-3xl sm:text-4xl font-bold text-center px-4 mt-6 sm:mt-8" id="about-me-title">
-        About Me
-      </h1>
+    <section className="px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="about-me-title">
+      <div className="mx-auto max-w-6xl space-y-10">
+        <header className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.45em] text-emerald-500">Origin Story</p>
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl" id="about-me-title">
+                Ben Simmers · Builder Dashboard
+              </h1>
+              <p className="text-sm text-slate-500">
+                A rolling snapshot of how I think, experiment, and internally scream
+              </p>
+            </div>
+            <div className="grid gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500 sm:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 px-4 py-3">
+                <p className="text-[0.65rem] text-emerald-500">CURRENT ROLE</p>
+                <p className="mt-2 text-base font-semibold text-slate-900">TechnologyOne</p>
+                <p className="text-[0.75rem] text-slate-500">R&D · SDXP</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 px-4 py-3">
+                <p className="text-[0.65rem] text-emerald-500">FOCUS AREAS</p>
+                <p className="text-[0.75rem] text-slate-500">React · C# · building cool things</p>
+              </div>
+            </div>
+          </div>
+        </header>
 
-      <div className="flex flex-col items-center justify-center mt-6 sm:mt-10 px-4 sm:px-6 lg:px-8">
-        <section
-          className="w-full max-w-4xl bg-white rounded-lg shadow-md p-4 sm:p-6 lg:p-8"
-          aria-labelledby="introduction-title"
-        >
-          <h2 className="sr-only" id="introduction-title">
-            Introduction
-          </h2>
-          <p className="text-sm sm:text-base leading-relaxed">{Introduction.introduction}</p>
-        </section>
+        <div className="grid gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          <article className="space-y-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-500">Introduction</p>
+              <p className="mt-4 text-base leading-relaxed text-slate-600">{Introduction.introduction}</p>
+            </div>
+            {highlightedFeatures.length ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {highlightedFeatures.map((feature) => (
+                  <div key={feature.name} className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+                      {feature.name}
+                    </p>
+                    <p className="mt-2 text-sm text-slate-600">{feature.description}</p>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </article>
+
+          <aside className="space-y-4">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">Current load</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+                {"React / C# / Redux / Kubernetes / TypeScript / More".split(" / ").map((tag) => (
+                  <span key={tag} className="rounded-full border border-slate-200 px-3 py-1 text-slate-600">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </aside>
+        </div>
 
         <TimeLine />
 
-        <section
-          className="w-full max-w-4xl bg-white rounded-lg shadow-md p-4 sm:p-6 lg:p-8 mt-6 sm:mt-10 mb-6 sm:mb-10"
-          aria-labelledby="details-title"
-        >
-          <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6" id="details-title">
-            The Details
-          </h2>
-          <ul className="divide-y divide-gray-200">
+        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm" aria-labelledby="details-title">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-500">Operating Principles</p>
+              <h2 className="mt-2 text-2xl font-bold text-slate-900" id="details-title">
+                Me
+              </h2>
+            </div>
+            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+              Updated {new Date().getFullYear()}
+            </div>
+          </div>
+          <ul className="mt-8 grid gap-4 md:grid-cols-2">
             {features.map((feature) => (
-              <li key={feature.name} className="py-3 sm:py-4">
-                <div className="flex space-x-3">
-                  <div className="flex-1 space-y-1">
-                    <h3
-                      className="text-base sm:text-lg leading-6 font-medium text-gray-900"
-                      id={`feature-title-${feature.name}`}
-                    >
-                      {feature.name}
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-500">{feature.description}</p>
-                  </div>
-                </div>
+              <li key={feature.name} className="rounded-2xl border border-slate-100 bg-slate-50/80 p-5">
+                <h3 className="text-base font-semibold text-slate-900">{feature.name}</h3>
+                <p className="mt-2 text-sm text-slate-600">{feature.description}</p>
               </li>
             ))}
           </ul>
         </section>
       </div>
-    </React.Fragment>
+    </section>
   );
 };
