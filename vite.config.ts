@@ -3,13 +3,11 @@ import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 export default defineConfig({
   plugins: [react()],
   server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, "localhost+1-key.pem")),
-      cert: fs.readFileSync(path.resolve(__dirname, "localhost+1.pem")),
-    },
     host: "localhost",
     port: 5173,
   },
