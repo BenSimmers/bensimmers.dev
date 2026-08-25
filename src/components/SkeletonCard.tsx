@@ -1,29 +1,23 @@
-import React from "react";
-
-interface SkeletonCardProps {
-  count?: number;
+type SkeletonCardProps = {
   className?: string;
-}
+};
 
-export const SkeletonCard: React.FunctionComponent<SkeletonCardProps> = ({
-  count = 1,
-  className = "",
-}) => (
-  <React.Fragment>
-    {Array.from({ length: count }).map((_, i) => (
-      <div
-        key={i}
-        className={`relative overflow-hidden rounded-3xl border border-slate-200 bg-white/70 p-6 shadow-inner animate-pulse ${className}`}
-      >
-        <div className="h-3 w-16 rounded bg-slate-200/90" />
-        <div className="mt-4 h-5 w-3/4 rounded bg-slate-200/70" />
-        <div className="mt-3 h-3 w-full rounded bg-slate-200/70" />
-        <div className="mt-2 h-3 w-11/12 rounded bg-slate-200/60" />
-        <div className="mt-auto flex items-center justify-between pt-6">
-          <div className="h-3 w-20 rounded bg-slate-200/60" />
-          <div className="h-3 w-16 rounded bg-slate-200/60" />
-        </div>
+export const SkeletonCard = ({ className = "" }: SkeletonCardProps) => (
+  <div className={`neo-card neo-shadow flex animate-pulse flex-col justify-between p-6 ${className}`}>
+    <div>
+      <div className="flex items-start justify-between">
+        <div className="h-4 w-24 bg-surface-container-highest" />
+        <div className="h-8 w-16 border-2 border-primary" />
       </div>
-    ))}
-  </React.Fragment>
+      <div className="mt-6 h-7 w-3/4 bg-surface-container-highest" />
+      <div className="mt-4 h-4 w-full bg-surface-container-high" />
+      <div className="mt-2 h-4 w-11/12 bg-surface-container-high" />
+    </div>
+    <div className="mt-8 flex items-center justify-between border-t-2 border-primary pt-4">
+      <div className="h-4 w-12 bg-surface-container-high" />
+      <div className="h-4 w-24 bg-surface-container-high" />
+    </div>
+  </div>
 );
+
+export default SkeletonCard;

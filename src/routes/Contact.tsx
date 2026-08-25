@@ -1,42 +1,26 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useForm, ValidationError } from "@formspree/react";
 
-const formEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT ?? "";
+const formEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
 
-const Contact: React.FunctionComponent = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [state, handleSubmit] = useForm(formEndpoint);
+const fieldClass = "flex flex-col gap-2";
+const labelClass = "font-label-caps text-label-caps uppercase text-primary";
 
-  useEffect(() => {
-    if (state.succeeded) {
-      setIsOpen(true);
-    }
-  }, [state.succeeded]);
+const Contact = () => {
+  const [dismissed, setDismissed] = useState(false);
+  // useForm throws on an empty key, so fall back to a placeholder and keep the
+  // form disabled rather than crashing the page when the env var is missing.
+  const [state, handleSubmit] = useForm(formEndpoint || "missing-formspree-endpoint");
 
-  const closeModal = () => setIsOpen(false);
-
-  const heroCopy = useMemo(
-    () => ({
-      heading: "Feel free to reach out",
-      body: "Have a question or literally just want to say hi? My inbox is open...",
-    }),
-    []
-  );
-
-  if (!formEndpoint) {
-    console.warn("VITE_FORMSPREE_ENDPOINT is missing; contact form submissions will fail.");
-  }
-
-  if (isOpen && state.succeeded) {
+  if (state.succeeded && !dismissed) {
     return (
-      <section className="px-4 py-20">
-        <div className="mx-auto max-w-2xl rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">Message Received</p>
-          <h2 className="mt-4 text-3xl font-semibold text-slate-900">Thanks for reaching out!</h2>
-          <button
-            onClick={closeModal}
-            className="mt-8 inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
-          >
+      <section className="flex flex-grow items-center justify-center py-12">
+        <div className="neo-card mx-auto w-full max-w-2xl p-8 shadow-neo-xl md:p-margin">
+          <span className="neo-eyebrow block">Message Received</span>
+          <h1 className="mt-4 font-display text-3xl font-bold leading-tight tracking-tight text-primary sm:text-4xl lg:text-headline-lg">
+            Thanks for reaching out!
+          </h1>
+          <button onClick={() => setDismissed(true)} className="neo-button mt-8">
             Send another message
           </button>
         </div>
@@ -45,77 +29,82 @@ const Contact: React.FunctionComponent = () => {
   }
 
   return (
-    <section className="px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl space-y-10">
-        <div className="space-y-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-500">Contact</p>
-          <div className="space-y-3">
-            <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">{heroCopy.heading}</h1>
-            <p className="mx-auto max-w-2xl text-sm text-slate-500">{heroCopy.body}</p>
-          </div>
+    <section className="relative flex flex-grow items-center justify-center overflow-hidden py-12">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: "radial-gradient(#000000 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto grid w-full max-w-4xl grid-cols-1 gap-12 md:grid-cols-2 md:gap-margin">
+        <div className="flex flex-col justify-center">
+          <h1 className="mb-6 font-display text-4xl font-bold leading-tight tracking-tight text-primary sm:text-5xl lg:text-[64px] lg:leading-[1.05]">
+            Feel free to reach out
+          </h1>
+          <p className="max-w-md font-body-lg text-body-lg text-on-surface-variant">
+            Have a question or literally just want to say hi? My inbox is open...
+          </p>
+          <div className="mt-12 border-t-3 border-primary pt-8 md:mt-margin" />
         </div>
 
-        <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-xs font-semibold uppercase tracking-[0.35em] text-slate-500"
-              >
+        <div className="neo-card p-6 shadow-neo-xl md:p-gutter">
+          <form
+            onSubmit={(event) => {
+              setDismissed(false);
+              return handleSubmit(event);
+            }}
+            className="flex flex-col gap-6"
+          >
+            <div className={fieldClass}>
+              <label htmlFor="name" className={labelClass}>
                 Name
               </label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
-                required
-              />
+              <input id="name" type="text" name="name" placeholder="Jane Doe" className="neo-input" required />
               <ValidationError prefix="Name" field="name" errors={state.errors} />
             </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-xs font-semibold uppercase tracking-[0.35em] text-slate-500"
-              >
+
+            <div className={fieldClass}>
+              <label htmlFor="email" className={labelClass}>
                 Email Address
               </label>
               <input
                 id="email"
                 type="email"
                 name="email"
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                placeholder="jane@example.com"
+                className="neo-input"
                 required
               />
               <ValidationError prefix="Email" field="email" errors={state.errors} />
             </div>
-          </div>
 
-          <div className="mt-5">
-            <label
-              htmlFor="message"
-              className="block text-xs font-semibold uppercase tracking-[0.35em] text-slate-500"
+            <div className={fieldClass}>
+              <label htmlFor="message" className={labelClass}>
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                placeholder="What's on your mind?"
+                className="neo-input resize-none"
+                required
+              />
+              <ValidationError prefix="Message" field="message" errors={state.errors} />
+            </div>
+
+            <button
+              type="submit"
+              disabled={state.submitting || !formEndpoint}
+              className="neo-press mt-4 w-full border-3 border-primary bg-primary py-4 font-label-caps text-label-caps uppercase text-on-primary shadow-neo hover:bg-secondary hover:text-on-secondary disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={5}
-              className="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
-              required
-            />
-            <ValidationError prefix="Message" field="message" errors={state.errors} />
-          </div>
-
-          <button
-            type="submit"
-            disabled={state.submitting || !formEndpoint}
-            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {state.submitting ? "Sending..." : "Send Message"}
-          </button>
-        </form>
+              {state.submitting ? "Sending..." : "Send Message"}
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   );

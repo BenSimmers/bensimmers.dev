@@ -1,57 +1,64 @@
+import { useEffect } from "react";
 import { create } from "zustand";
-import { ProjectType, Repo } from "../utils/types";
+import { useShallow } from "zustand/react/shallow";
 
+export type Repo = {
+  id: number;
+  full_name: string;
+  description: string;
+  html_url: string;
+  private: boolean;
+  language?: string;
+  stargazers_count?: number;
+  topics?: string[];
+  pushed_at?: string;
+};
 
 type ProjectsStore = {
-    projects: ProjectType[];
-    isSubscribed: boolean;
-    loading: boolean;
-    error: string | null;
-    actions: {
-        fetchProjects: () => Promise<void>;
-        markSubscribed: () => void;
-    };
-}
+  projects: Repo[];
+  loading: boolean;
+  error: string | null;
+  hasFetched: boolean;
+  fetchProjects: () => Promise<void>;
+};
 
+const byStars = (a: Repo, b: Repo) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0);
 
 const useProjectsStore = create<ProjectsStore>((set, get) => ({
-    projects: [],
-    isSubscribed: false,
-    loading: false,
-    error: null,
-    actions: {
-        fetchProjects: async () => {
-            const { isSubscribed, loading } = get();
-            if (isSubscribed || loading) {
-                return;
-            }
+  projects: [],
+  loading: false,
+  error: null,
+  hasFetched: false,
+  fetchProjects: async () => {
+    const { hasFetched, loading } = get();
+    if (hasFetched || loading) return;
 
-            set({ loading: true, error: null });
-            try {
-                const response = await fetch(import.meta.env.VITE_GITHUB_API_URL);
-                if (!response.ok) throw new Error("Failed to fetch projects");
+    set({ loading: true, error: null });
+    try {
+      const response = await fetch(import.meta.env.VITE_GITHUB_API_URL);
+      if (!response.ok) throw new Error("Failed to fetch projects");
 
-                const data: Repo[] = await response.json(); 
-                const filteredPublicRepos = data.filter(
-                    (repo) => repo.private === false && repo.description !== null
-                );
-                set({ projects: filteredPublicRepos, loading: false, isSubscribed: true });
-            } catch (error) {
-                set({
-                    loading: false,
-                    error: error instanceof Error ? error.message : "Failed to fetch projects",
-                });
-            }
-        },
-        markSubscribed: () => set({ isSubscribed: true }),
-    },
-}))
-
-export const useProjects = () => useProjectsStore((state) => ({
-    projects: state.projects,
+      const repos: Repo[] = await response.json();
+      const projects = repos.filter((repo) => !repo.private && repo.description).sort(byStars);
+      set({ projects, loading: false, hasFetched: true });
+    } catch (error) {
+      set({
+        loading: false,
+        error: error instanceof Error ? error.message : "Failed to fetch projects",
+      });
+    }
+  },
 }));
 
-export const useProjectsStatus = () =>
-    useProjectsStore((state) => ({ loading: state.loading, error: state.error }));
+/** Fetches once per session and returns the projects with their load state. */
+export const useProjects = () => {
+  const fetchProjects = useProjectsStore((state) => state.fetchProjects);
 
-export const useProjectsActions = () => useProjectsStore((state) => state.actions);
+  useEffect(() => {
+    void fetchProjects();
+  }, [fetchProjects]);
+
+  return useProjectsStore(
+    useShallow(({ projects, loading, error }) => ({ projects, loading, error }))
+  );
+};

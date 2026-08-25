@@ -1,59 +1,49 @@
-import React, { SetStateAction, Suspense, useState } from "react";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { WavyContainer } from "react-wavy-transitions";
+import Nav from "./components/Navigation";
+import Footer from "./components/Footer";
 
-const About = React.lazy(() => import("./routes/About"));
-const Home = React.lazy(() => import("./routes/Home"));
-const Contact = React.lazy(() => import("./routes/Contact"));
-const Portfolio = React.lazy(() => import("./routes/Portfolio"));
-const NotFound = React.lazy(() => import("./components/404"));
-const Nav = React.lazy(() => import("./utils/Navigation"));
-const Footer = React.lazy(() => import("./utils/Footer"));
+const Home = lazy(() => import("./routes/Home"));
+const About = lazy(() => import("./routes/About"));
+const Portfolio = lazy(() => import("./routes/Portfolio"));
+const Contact = lazy(() => import("./routes/Contact"));
+const NotFound = lazy(() => import("./routes/NotFound"));
 
-const RouteFallback: React.FunctionComponent = () => (
-  <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 text-slate-500">
-    <span className="inline-flex h-10 w-10 animate-spin rounded-full border-2 border-slate-200 border-t-slate-600" />
-    <p className="text-sm font-medium tracking-wide uppercase">Loading next view</p>
+const RouteFallback = () => (
+  <div className="flex min-h-[40vh] flex-col items-center justify-center gap-6">
+    <span className="inline-flex h-10 w-10 animate-spin border-3 border-primary border-t-secondary" />
+    <p className="font-label-caps text-label-caps uppercase text-on-surface-variant">Loading next view</p>
   </div>
 );
 
-type AppLayoutProps = {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<SetStateAction<boolean>>;
-};
-
-const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ isOpen, setIsOpen }) => (
-  <React.Fragment>
-    <Nav isOpen={isOpen} setIsOpen={setIsOpen} />
-    <main className="flex-grow">
-      <Outlet />
+const Layout = () => (
+  <>
+    <Nav />
+    <main className="mx-auto flex w-full max-w-container-max flex-grow flex-col px-6 py-12 md:px-margin md:py-margin">
+      <Suspense fallback={<RouteFallback />}>
+        <Outlet />
+      </Suspense>
     </main>
     <Footer />
-  </React.Fragment>
+  </>
 );
 
-const App: React.FunctionComponent<{}> = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  return (
-    <BrowserRouter>
-      <Suspense fallback={<RouteFallback />}>
-        <div className="min-h-screen bg-slate-50/60">
-          <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
-            <WavyContainer />
-            <Routes>
-              <Route path="/" element={<AppLayout isOpen={isOpen} setIsOpen={setIsOpen} />}>
-                <Route index element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/portfolio" element={<Portfolio />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </div>
-        </div>
-      </Suspense>
-    </BrowserRouter>
-  );
-};
+const App = () => (
+  <BrowserRouter>
+    <div className="flex min-h-screen flex-col bg-background font-body-md text-primary">
+      <WavyContainer />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="portfolio" element={<Portfolio />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </div>
+  </BrowserRouter>
+);
 
 export default App;
